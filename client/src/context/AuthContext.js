@@ -4,6 +4,12 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
+// Ensure credentials are sent with every request
+axios.interceptors.request.use((config) => {
+  config.withCredentials = true;
+  return config;
+});
+
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);

@@ -29,8 +29,23 @@ app.use(helmet({
 
 // --- CORS SETUP ---
 // Use environment variables for flexible origin configuration
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.FRONTEND_ORIGIN,
+  "http://localhost:3000",
+  "http://localhost:5173"
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || process.env.FRONTEND_ORIGIN || "http://localhost:3000",
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    console.log('Blocked origin:', origin);
+    return callback(new Error('CORS policy violation'), false);
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
