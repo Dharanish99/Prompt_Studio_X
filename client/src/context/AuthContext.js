@@ -1,15 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
-axios.defaults.withCredentials = true;
-axios.defaults.baseURL = process.env.REACT_APP_API_URL || "http://localhost:5000";
-
-// Ensure credentials are sent with every request
-axios.interceptors.request.use((config) => {
-  config.withCredentials = true;
-  return config;
-});
-
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -18,11 +9,29 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // 1. SETUP AXIOS DYNAMICALLY
+  // This ensures we use the correct URL even if the global default wasn't set
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+  
+  // Configure a specific instance for auth calls
+  const api = axios.create({
+    baseURL: API_URL,
+    withCredentials: true // Crucial for passing the cookie back
+  });
+
   const checkAuth = async () => {
     try {
-      const res = await axios.get("/auth/me");
-      setUser(res.data);
-    } catch {
+      // 2. CALL THE ENDPOINT
+      console.log("🔍 Checking Auth at:", `${API_URL}/auth/me`);
+      const res = await api.get("/auth/me");
+      
+      if (res.data) {
+        console.log("✅ User Found:", res.data.email);
+        setUser(res.data);
+      }
+    } catch (err) {
+      // It's normal to get a 401 if not logged in
+      console.log("⚠️ No active session found.");
       setUser(null);
     } finally {
       setLoading(false);
@@ -31,7 +40,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post("/auth/logout");
+      await api.post("/auth/logout");
       setUser(null);
     } catch (error) {
       console.error('Logout error:', error);
@@ -40,20 +49,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Delay initial auth check to allow session to be established after OAuth redirect
-    const timer = setTimeout(checkAuth, 100);
+    // Check immediately on mount
+    checkAuth();
 
-    // Re-check after OAuth redirect with delay
+    // Check again when the window gains focus (e.g. returning from Google Login)
     const handleFocus = () => {
-      setTimeout(checkAuth, 200);
+       // Small delay to allow cookie to settle
+       setTimeout(checkAuth, 500);
     };
     
     window.addEventListener("focus", handleFocus);
-    
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("focus", handleFocus);
-    };
+    return () => window.removeEventListener("focus", handleFocus);
   }, []);
 
   return (
