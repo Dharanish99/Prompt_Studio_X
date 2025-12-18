@@ -3,7 +3,15 @@ import passport from "passport";
 
 const router = express.Router();
 
-const FRONTEND_URL = process.env.CLIENT_URL || process.env.FRONTEND_ORIGIN;
+const FRONTEND_URL = process.env.CLIENT_URL || process.env.FRONTEND_ORIGIN || "http://localhost:3000";
+
+// Debug logging
+console.log('🔍 AUTH DEBUG:', {
+  CLIENT_URL: process.env.CLIENT_URL,
+  FRONTEND_ORIGIN: process.env.FRONTEND_ORIGIN,
+  FRONTEND_URL: FRONTEND_URL,
+  NODE_ENV: process.env.NODE_ENV
+});
 
 /* ---------- GOOGLE OAUTH ---------- */
 router.get(
