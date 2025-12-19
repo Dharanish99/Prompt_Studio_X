@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { 
-  Mail, ArrowRight, Github, Chrome, 
-  AlertCircle, Sparkles, Command, Cpu 
+import {
+  Mail, ArrowRight, Github, Chrome,
+  AlertCircle, Sparkles, Command, Cpu
 } from "lucide-react";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 // --- Configuration ---
-const BACKEND_URL = process.env.REACT_APP_API_URL;
+const BACKEND_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 // --- Utility ---
 function cn(...inputs) { return twMerge(clsx(inputs)); }
@@ -20,7 +20,7 @@ const InputField = ({ icon: Icon, type, placeholder, value, onChange }) => (
     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 transition-colors duration-300 group-focus-within:text-blue-400">
       <Icon size={18} />
     </div>
-    
+
     {/* Input */}
     <input
       type={type}
@@ -29,7 +29,7 @@ const InputField = ({ icon: Icon, type, placeholder, value, onChange }) => (
       onChange={onChange}
       className="w-full rounded-xl border border-white/10 bg-neutral-900/50 py-3.5 pl-12 pr-4 text-sm text-white placeholder-neutral-600 outline-none transition-all duration-300 focus:border-blue-500/50 focus:bg-blue-500/5 focus:shadow-[0_0_30px_-10px_rgba(59,130,246,0.3)] hover:border-white/20"
     />
-    
+
     {/* Focus Glow Line (Bottom) */}
     <div className="absolute bottom-0 left-4 right-4 h-[1px] scale-x-0 bg-gradient-to-r from-transparent via-blue-500 to-transparent transition-transform duration-500 group-focus-within:scale-x-100" />
   </div>
@@ -69,42 +69,42 @@ const BrandPanel = () => (
     <div className="relative z-10 flex flex-1 flex-col items-center justify-center">
       <div className="relative h-64 w-64">
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 opacity-20 blur-3xl animate-pulse" />
-        
+
         <div className="absolute inset-0 flex items-center justify-center">
-             <motion.div 
-               initial={{ opacity: 0, scale: 0.8 }}
-               animate={{ opacity: 1, scale: 1 }}
-               transition={{ duration: 1 }}
-               className="relative h-32 w-32 overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl"
-             >
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent" />
-                <div className="flex h-full flex-col items-center justify-center text-neutral-400">
-                    <Command size={40} className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" />
-                </div>
-             </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1 }}
+            className="relative h-32 w-32 overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl"
+          >
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent" />
+            <div className="flex h-full flex-col items-center justify-center text-neutral-400">
+              <Command size={40} className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" />
+            </div>
+          </motion.div>
         </div>
-        
+
         {/* Floating Badges */}
-        <motion.div 
-            animate={{ y: [0, -15, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -right-8 top-10 rounded-xl border border-white/10 bg-neutral-900/90 p-3 shadow-xl backdrop-blur-md"
+        <motion.div
+          animate={{ y: [0, -15, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -right-8 top-10 rounded-xl border border-white/10 bg-neutral-900/90 p-3 shadow-xl backdrop-blur-md"
         >
-            <div className="flex items-center gap-2 text-xs font-medium text-blue-300">
-                <Sparkles size={12} />
-                <span>AI Enhanced</span>
-            </div>
+          <div className="flex items-center gap-2 text-xs font-medium text-blue-300">
+            <Sparkles size={12} />
+            <span>AI Enhanced</span>
+          </div>
         </motion.div>
-        
-        <motion.div 
-            animate={{ y: [0, 15, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute -left-8 bottom-10 rounded-xl border border-white/10 bg-neutral-900/90 p-3 shadow-xl backdrop-blur-md"
+
+        <motion.div
+          animate={{ y: [0, 15, 0] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute -left-8 bottom-10 rounded-xl border border-white/10 bg-neutral-900/90 p-3 shadow-xl backdrop-blur-md"
         >
-            <div className="flex items-center gap-2 text-xs font-medium text-purple-300">
-                <Cpu size={12} />
-                <span>Optimized</span>
-            </div>
+          <div className="flex items-center gap-2 text-xs font-medium text-purple-300">
+            <Cpu size={12} />
+            <span>Optimized</span>
+          </div>
         </motion.div>
       </div>
     </div>
@@ -144,7 +144,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-black font-sans text-white">
-      
+
       {/* LEFT: BRAND PANEL (Design from Old Code) */}
       <BrandPanel />
 
@@ -160,7 +160,7 @@ const LoginPage = () => {
           {/* Mobile Logo */}
           <div className="mb-8 flex justify-center lg:hidden">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600">
-                <Sparkles size={24} className="text-white" />
+              <Sparkles size={24} className="text-white" />
             </div>
           </div>
 
@@ -175,13 +175,13 @@ const LoginPage = () => {
 
           {/* Error Display (Adapted for New Logic) */}
           {error && (
-            <motion.div 
-              initial={{ opacity: 0, height: 0 }} 
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               className="mb-6 flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-200"
             >
-                <AlertCircle size={16} className="shrink-0" />
-                {error}
+              <AlertCircle size={16} className="shrink-0" />
+              {error}
             </motion.div>
           )}
 
@@ -208,13 +208,13 @@ const LoginPage = () => {
             />
 
             <div className="mt-4">
-                <button
-                    type="submit"
-                    className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-white py-3.5 text-sm font-bold text-black transition-all hover:bg-neutral-200 active:scale-95"
-                >
-                  <span>Send Login Code</span>
-                  <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-                </button>
+              <button
+                type="submit"
+                className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-white py-3.5 text-sm font-bold text-black transition-all hover:bg-neutral-200 active:scale-95"
+              >
+                <span>Send Login Code</span>
+                <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              </button>
             </div>
           </form>
 

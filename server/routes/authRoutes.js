@@ -5,7 +5,7 @@ const router = express.Router();
 
 // 1. DYNAMIC URL SETUP
 // We explicitly check for the Render Environment Variable
-const FRONTEND_URL = process.env.CLIENT_URL;
+const FRONTEND_URL = process.env.CLIENT_URL || "http://localhost:3000";
 
 console.log("🔒 AUTH ROUTE CONFIG:", {
   FRONTEND_URL,
@@ -29,10 +29,10 @@ router.get(
         console.error("❌ Session Save Error:", err);
         return res.redirect(`${FRONTEND_URL}/?error=session_failed`);
       }
-      
+
       // 4. THE FIX: Redirect to Root (/) not /dashboard
       console.log("✅ Auth Success. Redirecting to:", FRONTEND_URL);
-      res.redirect(`${FRONTEND_URL}/`); 
+      res.redirect(`${FRONTEND_URL}/`);
     });
   }
 );
@@ -73,10 +73,10 @@ router.get("/me", (req, res) => {
 router.post("/logout", (req, res) => {
   req.logout((err) => {
     if (err) return res.status(500).json({ error: "Logout failed" });
-    
+
     req.session.destroy((err) => {
       if (err) return res.status(500).json({ error: "Session destroy failed" });
-      
+
       // Clear the specific cookie name
       res.clearCookie("promptstudio.sid");
       res.json({ success: true });
