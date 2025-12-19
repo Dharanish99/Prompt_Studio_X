@@ -10,6 +10,8 @@ import {
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+const BACKEND_URL = process.env.REACT_APP_API_URL || "";
+
 function cn(...inputs) { return twMerge(clsx(inputs)); }
 
 // --- COMPONENTS ---
@@ -98,7 +100,7 @@ const ImagePromptEnhancer = ({ initialPrompt = "", initialModel = "midjourney" }
 
     try {
       if (isRefineMode) {
-        const res = await axios.post("/api/image-enhance/analyze-prompt", { 
+        const res = await axios.post(`${BACKEND_URL}/api/image-enhance/analyze-prompt`, { 
           prompt: imagePrompt 
         }, { withCredentials: true });
 
@@ -107,7 +109,7 @@ const ImagePromptEnhancer = ({ initialPrompt = "", initialModel = "midjourney" }
         setStep("questions");
 
       } else {
-        const res = await axios.post("/api/image-enhance/image-enhance", { 
+        const res = await axios.post(`${BACKEND_URL}/api/image-enhance/image-enhance`, { 
           prompt: imagePrompt, 
           model: imageModel 
         }, { withCredentials: true });
@@ -125,7 +127,7 @@ const ImagePromptEnhancer = ({ initialPrompt = "", initialModel = "midjourney" }
   const handleFinalize = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("/api/image-enhance/finalize-prompt", {
+      const res = await axios.post(`${BACKEND_URL}/api/image-enhance/finalize-prompt`, {
         original: imagePrompt, 
         answers: userAnswers,
         model: imageModel
