@@ -11,13 +11,13 @@ export const AuthProvider = ({ children }) => {
 
   // 1. SETUP AXIOS DYNAMICALLY
   // This ensures we use the correct URL even if the global default wasn't set
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+  const API_URL = process.env.REACT_APP_API_URL;
   
   // Configure a specific instance for auth calls
   const api = axios.create({
     baseURL: API_URL,
     withCredentials: true // Crucial for passing the cookie back
-  });
+  }); 
 
   const checkAuth = async () => {
     try {

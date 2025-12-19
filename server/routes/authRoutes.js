@@ -5,7 +5,7 @@ const router = express.Router();
 
 // 1. DYNAMIC URL SETUP
 // We explicitly check for the Render Environment Variable
-const FRONTEND_URL = process.env.CLIENT_URL || "http://localhost:3000";
+const FRONTEND_URL = process.env.CLIENT_URL;
 
 console.log("🔒 AUTH ROUTE CONFIG:", {
   FRONTEND_URL,

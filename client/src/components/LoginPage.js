@@ -8,7 +8,7 @@ import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 // --- Configuration ---
-const BACKEND_URL = "https://prompt-studio-x.onrender.com";
+const BACKEND_URL = process.env.REACT_APP_API_URL;
 
 // --- Utility ---
 function cn(...inputs) { return twMerge(clsx(inputs)); }
